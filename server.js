@@ -7,7 +7,7 @@ const dev = require('webpack-dev-middleware');
 const hot = require('webpack-hot-middleware');
 const config = require('./webpack.config.js');
 
-const port = process.env.PORT || 3000;
+const port = process.env.SERVER_PORT || 3000;
 const server = express();
 global.__ENVIRONMENT__ = process.env.NODE_ENV || 'default';
 
