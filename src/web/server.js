@@ -2,13 +2,17 @@ require('babel-core/register');
 
 const path = require('path');
 const express = require('express');
+const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const dev = require('webpack-dev-middleware');
 const hot = require('webpack-hot-middleware');
-const config = require('./webpack.config.js');
+const config = require('../../webpack.config.js');
 
 const port = process.env.PORT || 3000;
 const server = express();
+server.use(bodyParser.json());
+server.use(bodyParser.urlencoded({ extended: true }));
+
 global.__ENVIRONMENT__ = process.env.NODE_ENV || 'default';
 
 // Otherwise errors thrown in Promise routines will be silently swallowed.
@@ -47,11 +51,16 @@ if (!process.env.NODE_ENV) {
   server.use(hot(compiler));
 }
 
-server.get('*', require('./src/web').serverMiddleware);
+server.apiPrefix = '/api';
+require('./api')(server);
+const models = require('./models');
+server.get('*', require('./index').serverMiddleware);
 
-server.listen(port, (err) => {
-  if (err) {
-    console.error(err);
-  }
-  console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+models.sequelize.sync().then(() => {
+  server.listen(port, (err) => {
+    if (err) {
+      console.error(err);
+    }
+    console.info('==> 🌎 Listening on port %s. Open up http://localhost:%s/ in your browser.', port, port);
+  });
 });
