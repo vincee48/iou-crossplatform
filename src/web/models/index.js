@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
+import fs from 'fs';
+import path from 'path';
+import Sequelize from 'sequelize';
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,

@@ -7,6 +7,7 @@ import NoMatch from './containers/NoMatch';
 export default (
   <Route component={App}>
     <Route path="/" component={Home} />
+    <Route path="/login" component={Home} />
     <Route path="*" component={NoMatch} />
   </Route>
 );

@@ -13,13 +13,15 @@ const isClient = typeof document !== 'undefined';
 
 if (isClient) {
   const store = configureStore(window.__INITIAL_STATE__);
-
+  console.log('is client');
   ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>{routes}</Router>
     </Provider>,
     document.getElementById('root')
   );
+} else {
+  console.log('is server');
 }
 
 function renderComponentWithRoot(Component, componentProps, store) {
@@ -58,8 +60,9 @@ function handleRoute(res, renderProps) {
 
   Promise
     .all(readyOnAllActions)
-    .then(() => res.status(status)
-    .send(renderComponentWithRoot(RouterContext, renderProps, store)));
+    .then(() =>
+      res.status(status).send(renderComponentWithRoot(RouterContext, renderProps, store))
+    );
 }
 
 export function serverMiddleware(req, res) {

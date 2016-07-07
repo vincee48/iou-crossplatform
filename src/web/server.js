@@ -7,11 +7,19 @@ const webpack = require('webpack');
 const dev = require('webpack-dev-middleware');
 const hot = require('webpack-hot-middleware');
 const config = require('../../webpack.config.js');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 const port = process.env.PORT || 3000;
 const server = express();
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use(cookieParser());
+server.use(session({
+  secret: 'forty8',
+  resave: false,
+  saveUninitialized: false,
+}));
 
 global.__ENVIRONMENT__ = process.env.NODE_ENV || 'default';
 
@@ -34,7 +42,7 @@ server.get('/favicon.ico', (req, res) => {
 
 server.use(express.static(path.resolve(__dirname, 'dist')));
 
-if (!process.env.NODE_ENV) {
+if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config);
 
   server.use(dev(compiler, {
@@ -51,11 +59,12 @@ if (!process.env.NODE_ENV) {
   server.use(hot(compiler));
 }
 
+require('./util/passport')(server);
 server.apiPrefix = '/api';
 require('./api')(server);
-const models = require('./models');
 server.get('*', require('./index').serverMiddleware);
 
+const models = require('./models');
 models.sequelize.sync().then(() => {
   server.listen(port, (err) => {
     if (err) {

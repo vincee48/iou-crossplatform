@@ -18,7 +18,7 @@ export default class Home extends Component {
   }
 
   componentDidMount() {
-    this.readyOnActions(this.props.dispatch);
+    Home.readyOnActions(this.props.dispatch);
   }
 
   renderUsers() {
@@ -42,6 +42,8 @@ export default class Home extends Component {
         <Helmet title="Home" />
         <h5>Users:</h5>
         {this.renderUsers()}
+        <a href="/auth/facebook">Login with Facebook</a>
+        <a href="/logout">Logout</a>
       </div>
     );
   }
