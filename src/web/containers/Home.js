@@ -45,7 +45,7 @@ export default class Home extends Component {
         <a href="/auth/facebook">Login with Facebook</a>
         <a href="/logout">Logout</a>
         <div>
-          <a href="/test">Test</a>
+          <a href="/dashboard">Dashboard</a>
         </div>
       </div>
     );

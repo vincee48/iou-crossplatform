@@ -1,6 +1,7 @@
 const models = require('../models');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const FacebookTokenStrategy = require('passport-facebook-token');
 
 module.exports = (server) => {
   server.use(passport.initialize());
@@ -37,11 +38,38 @@ module.exports = (server) => {
       ],
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(profile);
+      console.log(accessToken);
       models.User.findOrCreate({ where: { facebookId: profile.id } })
         .spread((user, created) => {
           console.log(user.get({ plain: true }), 'created: ', created);
-          done(null, user);
+          user.accessToken = accessToken;
+          user.save()
+            .then(() => {
+              done(null, user);
+            })
+            .catch((error) => {
+              done(error);
+            });
+        })
+        .catch((error) => {
+          done(error);
+        });
+    }
+  ));
+
+
+  passport.use(new FacebookTokenStrategy(
+    {
+      clientID: process.env.FB_APP_ID,
+      clientSecret: process.env.FB_APP_SECRET,
+    },
+    (accessToken, refreshToken, profile, done) => {
+      models.User.findOrCreate({
+        where: {
+          facebookId: profile.id
+        }
+      }).spread((user, created) => {
+          return done(null, user);
         })
         .catch((error) => {
           done(error);

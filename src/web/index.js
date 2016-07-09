@@ -51,12 +51,12 @@ function routeIsUnmatched(renderProps) {
   return renderProps.routes[renderProps.routes.length - 1].path === '*';
 }
 
-function handleRoute(res, renderProps) {
+function handleRoute(req, res, renderProps) {
   const store = configureStore();
   const status = routeIsUnmatched(renderProps) ? 404 : 200;
   const readyOnAllActions = renderProps.components
     .filter((component) => component && component.readyOnActions)
-    .map((component) => component.readyOnActions(store.dispatch, renderProps.params));
+    .map((component) => component.readyOnActions(store.dispatch, req.user));
 
   Promise
     .all(readyOnAllActions)
@@ -72,7 +72,7 @@ export function serverMiddleware(req, res) {
     } else if (redirectLocation) {
       handleRedirect(res, redirectLocation);
     } else if (renderProps) {
-      handleRoute(res, renderProps);
+      handleRoute(req, res, renderProps);
     } else {
       // This should actually never happen, as Routes.js has a catch-all '*' path.
       res.sendStatus(404);

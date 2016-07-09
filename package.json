@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --progress",
-    "start": "nodemon src/web/server.js",
+    "start": "nodemon --ignore src/web/containers --ignore src/web/components src/web/server.js",
     "server": "node src/web/server.js",
     "start-prod": "npm run build && npm run server",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -38,6 +38,7 @@
     "moment": "^2.13.0",
     "passport": "^0.3.2",
     "passport-facebook": "^2.1.1",
+    "passport-facebook-token": "^3.3.0",
     "pg": "^6.0.1",
     "pg-hstore": "^2.3.2",
     "react": "^15.1.0",

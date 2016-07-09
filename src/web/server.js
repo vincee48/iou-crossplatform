@@ -13,21 +13,16 @@ const session = require('express-session');
 
 const port = process.env.PORT || 3000;
 const server = express();
+server.use(express.static(path.resolve(__dirname, 'dist')));
 server.use(cors());
+server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
-server.use(cookieParser());
 server.use(session({
   secret: 'forty8',
   resave: false,
   saveUninitialized: false,
 }));
-
-// a middleware with no mount path; gets executed for every request to the app
-server.use(function(req, res, next) {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
 
 global.__ENVIRONMENT__ = process.env.NODE_ENV || 'default';
 
@@ -47,8 +42,6 @@ server.get('/favicon.ico', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'image/x-icon' });
   res.end();
 });
-
-server.use(express.static(path.resolve(__dirname, 'dist')));
 
 if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(config);

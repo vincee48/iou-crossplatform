@@ -11,13 +11,15 @@ function fetchAuth() {
 
     return axios.get('http://localhost:8080/auth/current/user', {
       withCredentials: true,
+      headers: {
+        Authorization: 'Bearer EAAZAiElMhaCEBAJLsnvZCF0GfHhojXNxtqgmW6oFFdEZBeYka7OUihCpaVKesu2wP0H5sIhZCj6MFX29TQOGAUDjcHjw5QUfwZB8XeSVfPdPuBItJXNsHX5luhuBOX75lxHbVJE5qG3LHAdPzscHow5efc9dZAmFUZD',
+      },
     })
       .then((response) => {
-        if (response.status === 404) {
-          dispatch({ type: AUTH_FETCH_FAILED, error: response.statusText });
-        } else {
-          dispatch({ type: AUTH_FETCHED, result: response.data })
-        }
+        dispatch({ type: AUTH_FETCHED, result: response.data })
+      })
+      .catch((error) => {
+        dispatch({ type: AUTH_FETCH_FAILED, error });
       });
   };
 }

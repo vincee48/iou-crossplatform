@@ -4,6 +4,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       primaryKey: true,
     },
+    accessToken: {
+      type: DataTypes.STRING,
+    },
     deviceId: {
       type: DataTypes.STRING,
     },

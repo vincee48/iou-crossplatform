@@ -3,6 +3,7 @@ import { Route, IndexRoute } from 'react-router';
 import { AUTH_FETCHED } from '../core/actions/auth';
 import App from './containers/App';
 import Home from './containers/Home';
+import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import NoMatch from './containers/NoMatch';
 import * as AuthActions from '../core/actions/auth';
@@ -11,7 +12,6 @@ export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
     function checkAuth() {
       const { auth } = store.getState();
-      console.log(auth);
       if (!auth.user) {
         // oops, not logged in, so can't be here!
         replace('/login');
@@ -33,7 +33,7 @@ export default (store) => {
       <IndexRoute component={Home}/>
 
       <Route onEnter={requireLogin}>
-        <Route path="test" component={Home}/>
+        <Route path="dashboard" component={Dashboard}/>
       </Route>
 
       <Route path="login" component={Login} />
