@@ -2,6 +2,7 @@ require('babel-core/register');
 
 const path = require('path');
 const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const dev = require('webpack-dev-middleware');
@@ -12,6 +13,7 @@ const session = require('express-session');
 
 const port = process.env.PORT || 3000;
 const server = express();
+server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 server.use(cookieParser());
@@ -20,6 +22,12 @@ server.use(session({
   resave: false,
   saveUninitialized: false,
 }));
+
+// a middleware with no mount path; gets executed for every request to the app
+server.use(function(req, res, next) {
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 global.__ENVIRONMENT__ = process.env.NODE_ENV || 'default';
 

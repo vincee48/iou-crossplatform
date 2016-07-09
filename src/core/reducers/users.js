@@ -11,19 +11,22 @@ export default function users(state = {
 }, action) {
   switch (action.type) {
     case USERS_FETCHING:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         readyState: USERS_FETCHING,
-      });
+      };
     case USERS_FETCH_FAILED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         readyState: USERS_FETCH_FAILED,
         error: action.error,
-      });
+      };
     case USERS_FETCHED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         readyState: USERS_FETCHED,
         list: action.result,
-      });
+      };
     default:
       return state;
   }

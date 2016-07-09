@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { Router, match, RouterContext, browserHistory } from 'react-router';
 import Helmet from 'react-helmet';
-import routes from './Routes';
+import getRoutes from './Routes';
 import { Provider } from 'react-redux';
 import Root from './containers/Root';
 import configureStore from './configureStore';
@@ -16,7 +16,7 @@ if (isClient) {
   console.log('is client');
   ReactDOM.render(
     <Provider store={store}>
-      <Router history={browserHistory}>{routes}</Router>
+      <Router history={browserHistory}>{getRoutes(store)}</Router>
     </Provider>,
     document.getElementById('root')
   );
@@ -55,7 +55,7 @@ function handleRoute(res, renderProps) {
   const store = configureStore();
   const status = routeIsUnmatched(renderProps) ? 404 : 200;
   const readyOnAllActions = renderProps.components
-    .filter((component) => component.readyOnActions)
+    .filter((component) => component && component.readyOnActions)
     .map((component) => component.readyOnActions(store.dispatch, renderProps.params));
 
   Promise
@@ -66,7 +66,7 @@ function handleRoute(res, renderProps) {
 }
 
 export function serverMiddleware(req, res) {
-  match({ routes, location: req.url }, (error, redirectLocation, renderProps) => {
+  match({ routes: getRoutes(configureStore()), location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
       handleError(error);
     } else if (redirectLocation) {

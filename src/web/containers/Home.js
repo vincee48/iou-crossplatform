@@ -44,6 +44,9 @@ export default class Home extends Component {
         {this.renderUsers()}
         <a href="/auth/facebook">Login with Facebook</a>
         <a href="/logout">Logout</a>
+        <div>
+          <a href="/test">Test</a>
+        </div>
       </div>
     );
   }
