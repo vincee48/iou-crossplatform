@@ -8,12 +8,12 @@ import getRoutes from './Routes';
 import { Provider } from 'react-redux';
 import Root from './containers/Root';
 import configureStore from './configureStore';
+import reactCookie from 'react-cookie';
+import { isBrowser } from '../core/utils';
 
-const isClient = typeof document !== 'undefined';
-
-if (isClient) {
+if (isBrowser()) {
   const store = configureStore(window.__INITIAL_STATE__);
-  console.log('is client');
+  console.log('*** CLIENT ***');
   ReactDOM.render(
     <Provider store={store}>
       <Router history={browserHistory}>{getRoutes(store)}</Router>
@@ -21,7 +21,7 @@ if (isClient) {
     document.getElementById('root')
   );
 } else {
-  console.log('is server');
+  console.log('*** SERVER ***');
 }
 
 function renderComponentWithRoot(Component, componentProps, store) {
@@ -56,7 +56,7 @@ function handleRoute(req, res, renderProps) {
   const status = routeIsUnmatched(renderProps) ? 404 : 200;
   const readyOnAllActions = renderProps.components
     .filter((component) => component && component.readyOnActions)
-    .map((component) => component.readyOnActions(store.dispatch, req.user));
+    .map((component) => component.readyOnActions(store.dispatch));
 
   Promise
     .all(readyOnAllActions)
@@ -66,7 +66,8 @@ function handleRoute(req, res, renderProps) {
 }
 
 export function serverMiddleware(req, res) {
-  match({ routes: getRoutes(configureStore()), location: req.url }, (error, redirectLocation, renderProps) => {
+  reactCookie.plugToRequest(req, res);
+  match({ routes: getRoutes(configureStore(), req), location: req.url }, (error, redirectLocation, renderProps) => {
     if (error) {
       handleError(error);
     } else if (redirectLocation) {

@@ -38,10 +38,8 @@ module.exports = (server) => {
       ],
     },
     (accessToken, refreshToken, profile, done) => {
-      console.log(accessToken);
       models.User.findOrCreate({ where: { facebookId: profile.id } })
         .spread((user, created) => {
-          console.log(user.get({ plain: true }), 'created: ', created);
           user.accessToken = accessToken;
           user.save()
             .then(() => {

@@ -3,6 +3,7 @@ import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import * as UsersActions from '../../core/actions/users';
 import UserList from '../components/UserList';
+import { Link } from 'react-router';
 
 @connect(state => ({ users: state.users }))
 export default class Home extends Component {
@@ -42,10 +43,10 @@ export default class Home extends Component {
         <Helmet title="Home" />
         <h5>Users:</h5>
         {this.renderUsers()}
-        <a href="/auth/facebook">Login with Facebook</a>
+        <Link to="login">Login with Facebook</Link>
         <a href="/logout">Logout</a>
         <div>
-          <a href="/dashboard">Dashboard</a>
+          <Link to="dashboard">Dashboard</Link>
         </div>
       </div>
     );

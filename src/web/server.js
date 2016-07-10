@@ -1,4 +1,5 @@
 require('babel-core/register');
+require('babel-polyfill');
 
 const path = require('path');
 const express = require('express');

@@ -13,17 +13,14 @@ export default (store) => {
     function checkAuth() {
       const { auth } = store.getState();
       if (!auth.user) {
-        // oops, not logged in, so can't be here!
         replace('/login');
       }
       cb();
     }
 
     if (store.getState().auth.readyState !== AUTH_FETCHED) {
-      console.log('fetching if needed');
       store.dispatch(AuthActions.fetchAuthIfNeeded()).then(checkAuth);
     } else {
-      console.log('checking auth');
       checkAuth();
     }
   };

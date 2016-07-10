@@ -1,5 +1,6 @@
 import models from '../models';
 import passport from 'passport';
+import reactCookie from 'react-cookie';
 
 const authRouter = (server) => {
   server.get('/auth/facebook',
@@ -12,19 +13,15 @@ const authRouter = (server) => {
     passport.authenticate('facebook', { failureRedirect: '/login' }),
     (req, res) => {
       res.cookie('access_token', req.user.dataValues.accessToken);
+      reactCookie.setRawCookie(req.headers.cookie);
       res.redirect('/');
     }
   );
 
-  server.post('/auth/facebook/token',
-    passport.authenticate('facebook-token'),
-    (req, res) => {
-      console.log(req.user);
-    }
-  )
-
   server.get('/logout',
     (req, res) => {
+      res.clearCookie('access_token');
+      reactCookie.setRawCookie(req.headers.cookie);
       req.logout();
       res.redirect('/');
     }
