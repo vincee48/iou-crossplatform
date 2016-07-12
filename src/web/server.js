@@ -67,7 +67,7 @@ require('./api')(server);
 server.get('*', require('./index').serverMiddleware);
 
 const models = require('./models');
-models.sequelize.sync().then(() => {
+models.sequelize.sync({ force: true }).then(() => {
   server.listen(port, (err) => {
     if (err) {
       console.error(err);

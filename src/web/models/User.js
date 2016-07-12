@@ -10,6 +10,12 @@ module.exports = (sequelize, DataTypes) => {
     deviceId: {
       type: DataTypes.STRING,
     },
+  }, {
+    classMethods: {
+      associate: function(models) {
+        User.hasMany(models.Gift, { as: 'sender', foreignKey: 'senderId' });
+      }
+    }
   });
 
   return User;
