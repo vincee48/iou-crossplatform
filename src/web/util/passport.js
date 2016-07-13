@@ -7,6 +7,13 @@ module.exports = (server) => {
   server.use(passport.initialize());
   server.use(passport.session());
 
+  server.all('*', (req, res, next) => {
+    if (req.isAuthenticated()) {
+      req.headers.authorization = `Bearer ${req.user.dataValues.accessToken}`;
+    }
+    next();
+  });
+
   passport.serializeUser((user, done) => {
     done(null, user.facebookId);
   });
@@ -62,11 +69,8 @@ module.exports = (server) => {
       clientSecret: process.env.FB_APP_SECRET,
     },
     (accessToken, refreshToken, profile, done) => {
-      models.User.findOrCreate({
-        where: {
-          facebookId: profile.id
-        }
-      }).spread((user, created) => {
+      models.User.findOrCreate({ where: { facebookId: profile.id } })
+        .spread((user, created) => {
           return done(null, user);
         })
         .catch((error) => {

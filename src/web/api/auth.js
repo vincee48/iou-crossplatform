@@ -10,18 +10,11 @@ const authRouter = (server) => {
   );
 
   server.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: '/login' }),
-    (req, res) => {
-      res.cookie('access_token', req.user.dataValues.accessToken);
-      reactCookie.setRawCookie(req.headers.cookie);
-      res.redirect('/');
-    }
+    passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' })
   );
 
   server.get('/logout',
     (req, res) => {
-      res.clearCookie('access_token');
-      reactCookie.setRawCookie(req.headers.cookie);
       req.logout();
       res.redirect('/');
     }

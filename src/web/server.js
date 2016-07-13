@@ -16,9 +16,9 @@ const port = process.env.PORT || 3000;
 const server = express();
 server.use(express.static(path.resolve(__dirname, 'dist')));
 server.use(cors());
-server.use(cookieParser());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use(cookieParser());
 server.use(session({
   secret: 'forty8',
   resave: false,
@@ -62,7 +62,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 require('./util/passport')(server);
-server.apiPrefix = '/api';
 require('./api')(server);
 server.get('*', require('./index').serverMiddleware);
 
