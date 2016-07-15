@@ -11,6 +11,7 @@ const hot = require('webpack-hot-middleware');
 const config = require('../../webpack.config.js');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const expressSanitized = require('express-sanitize-escape');
 
 const port = process.env.PORT || 3000;
 const server = express();
@@ -18,6 +19,7 @@ server.use(express.static(path.resolve(__dirname, 'dist')));
 server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
+server.use(expressSanitized());
 server.use(cookieParser());
 server.use(session({
   secret: 'forty8',
@@ -61,12 +63,12 @@ if (process.env.NODE_ENV === 'development') {
   server.use(hot(compiler));
 }
 
-require('./util/passport')(server);
+require('./utils/passport')(server);
 require('./api')(server);
 server.get('*', require('./index').serverMiddleware);
 
 const models = require('./models');
-models.sequelize.sync({ force: true }).then(() => {
+models.sequelize.sync({ force: false }).then(() => {
   server.listen(port, (err) => {
     if (err) {
       console.error(err);

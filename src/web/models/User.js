@@ -10,10 +10,21 @@ module.exports = (sequelize, DataTypes) => {
     deviceId: {
       type: DataTypes.STRING,
     },
+    latitude: {
+      type: DataTypes.DOUBLE,
+    },
+    longitude: {
+      type: DataTypes.DOUBLE,
+    },
+    private: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     classMethods: {
       associate: function(models) {
-        User.hasMany(models.Gift, { as: 'sender', foreignKey: 'senderId' });
+        User.hasMany(models.Gift, { as: 'SentGifts', foreignKey: 'senderId' });
+        User.hasMany(models.Gift, { as: 'ReceivedGifts', foreignKey: 'recipientId' });
       }
     }
   });

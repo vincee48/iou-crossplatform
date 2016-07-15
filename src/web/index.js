@@ -8,7 +8,6 @@ import getRoutes from './Routes';
 import { Provider } from 'react-redux';
 import Root from './containers/Root';
 import configureStore from './configureStore';
-import reactCookie from 'react-cookie';
 import { isBrowser } from '../core/utils';
 
 if (isBrowser()) {
