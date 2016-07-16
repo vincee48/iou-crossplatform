@@ -10,6 +10,15 @@ module.exports = (sequelize, DataTypes) => {
     deviceId: {
       type: DataTypes.STRING,
     },
+    name: {
+      type: DataTypes.STRING,
+    },
+    picture: {
+      type: DataTypes.STRING,
+    },
+    cover: {
+      type: DataTypes.STRING,
+    },
     latitude: {
       type: DataTypes.DOUBLE,
     },

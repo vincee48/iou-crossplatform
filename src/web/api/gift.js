@@ -8,15 +8,17 @@ const giftRouter = (server) => {
   server.get(`${process.env.API_PREFIX}/gift/sent`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      models.User.findOne({
+      models.Gift.findAll({
         where: {
-          facebookId: req.user.dataValues.facebookId,
+          senderId: req.user.dataValues.facebookId,
         },
-        include: [{ model: models.Gift, as: 'SentGifts' }],
+        include: [{ model: models.User, as: 'Recipient' }],
       })
-      .then((user) => {
-        if (user) {
-          res.json(user);
+      .then((gifts) => {
+        if (gifts) {
+          res.json(gifts);
+        } else {
+          res.sendStatus(400);
         }
       });
     }
@@ -28,15 +30,17 @@ const giftRouter = (server) => {
   server.get(`${process.env.API_PREFIX}/gift/received`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      models.User.findOne({
+      models.Gift.findAll({
         where: {
-          facebookId: req.user.dataValues.facebookId,
+          recipientId: req.user.dataValues.facebookId,
         },
-        include: [{ model: models.Gift, as: 'ReceivedGifts' }],
+        include: [{ model: models.User, as: 'Sender' }],
       })
-      .then((user) => {
-        if (user) {
-          res.json(user);
+      .then((gifts) => {
+        if (gifts) {
+          res.json(gifts);
+        } else {
+          res.sendStatus(400);
         }
       });
     }
@@ -48,10 +52,10 @@ const giftRouter = (server) => {
   server.post(`${process.env.API_PREFIX}/gift/send`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      const recipientId = req.query.fbId;
+      const recipientId = req.body.fbId;
       const senderId = req.user.dataValues.facebookId;
-      const giftType = req.query.type || 'BEER';
-      const description = req.query.description;
+      const giftType = req.body.type || 'BEER';
+      const description = req.body.description;
 
       if (recipientId) {
         models.Gift.create({

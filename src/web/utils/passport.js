@@ -28,6 +28,27 @@ module.exports = (server) => {
     });
   });
 
+  function updateUserCallback(accessToken, refreshToken, profile, done) {
+    models.User.findOrCreate({ where: { facebookId: profile.id } })
+      .spread((user) => {
+        user.update({
+          accessToken,
+          cover: profile._json.cover.source,
+          picture: profile._json.picture.data.url,
+          name: `${profile.name.givenName} ${profile.name.familyName}`,
+        })
+        .then(() => {
+          done(null, user);
+        })
+        .catch((error) => {
+          done(error);
+        });
+      })
+      .catch((error) => {
+        done(error);
+      });
+  }
+
   passport.use(new FacebookStrategy(
     {
       clientID: process.env.FB_APP_ID,
@@ -40,25 +61,11 @@ module.exports = (server) => {
         'gender',
         'interested_in',
         'name',
-        'picture',
+        'picture.type(large)',
         'relationship_status',
       ],
     },
-    (accessToken, refreshToken, profile, done) => {
-      models.User.findOrCreate({ where: { facebookId: profile.id } })
-        .spread((user) => {
-          user.save({ accessToken })
-            .then(() => {
-              done(null, user);
-            })
-            .catch((error) => {
-              done(error);
-            });
-        })
-        .catch((error) => {
-          done(error);
-        });
-    }
+    updateUserCallback
   ));
 
 
@@ -66,13 +73,17 @@ module.exports = (server) => {
     {
       clientID: process.env.FB_APP_ID,
       clientSecret: process.env.FB_APP_SECRET,
+      profileFields: [
+        'id',
+        'cover',
+        'email',
+        'gender',
+        'interested_in',
+        'name',
+        'picture.type(large)',
+        'relationship_status',
+      ],
     },
-    (accessToken, refreshToken, profile, done) => {
-      models.User.findOrCreate({ where: { facebookId: profile.id } })
-        .spread((user) => done(null, user))
-        .catch((error) => {
-          done(error);
-        });
-    }
+    updateUserCallback
   ));
 };

@@ -10,7 +10,7 @@ const userRouter = (server) => {
     passport.authenticate('facebook-token'),
     (req, res) => {
       fb(req).api('/me',
-        { fields: 'name, id' },
+        { fields: 'name, id, picture.type(large), cover' },
         (response) => {
           res.json(response);
         }
@@ -25,7 +25,7 @@ const userRouter = (server) => {
     passport.authenticate('facebook-token'),
     (req, res) => {
       fb(req).api('/me/friends',
-        { fields: 'name, id' },
+        { fields: 'name, id, picture.type(large), cover' },
         (response) => {
           res.json(response);
         }
@@ -43,15 +43,7 @@ const userRouter = (server) => {
       models.User.findById(fbId)
         .then((user) => {
           if (user) {
-            fb(req).api(`/${fbId}`,
-              { fields: 'name, id, picture.type(large), cover, age_range' },
-              (response) => {
-                res.json({
-                  facebook: response,
-                  user,
-                });
-              }
-            );
+            res.json(user);
           } else {
             res.sendStatus(400);
           }
