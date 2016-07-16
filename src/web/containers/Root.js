@@ -34,6 +34,10 @@ export default class Root extends Component {
           {head.title.toComponent()}
           {head.meta.toComponent()}
           {head.link.toComponent()}
+          {
+            process.env.NODE_ENV === 'production' ?
+              <link rel="stylesheet" href="/style.css" /> : null
+          }
         </head>
         <body>
           <div id="root" dangerouslySetInnerHTML={{ __html: content }} />
