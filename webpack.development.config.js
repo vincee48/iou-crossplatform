@@ -30,7 +30,6 @@ module.exports = {
               transform: 'react-transform-hmr',
               // If you use React Native, pass 'react-native' instead:
               imports: ['react'],
-              // This is important for Webpack HMR:
               locals: ['module'],
             }],
           }],

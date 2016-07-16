@@ -15,3 +15,7 @@ npm install
 
 npm start
 ```
+
+## Production environment
+
+This repository runs the build on a Heroku instance with a PostgresDB addon. Heroku as a production environment does not install devDependencies, requiring all build tools to be installed as a dependency.

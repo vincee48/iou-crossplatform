@@ -12,7 +12,6 @@
   },
   "author": "Vincent Lo",
   "dependencies": {
-    "axios": "^0.13.0",
     "babel-cli": "^6.10.1",
     "babel-core": "^6.10.4",
     "babel-loader": "^6.2.4",
