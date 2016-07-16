@@ -9,7 +9,7 @@ function fetchAuth() {
     dispatch({ type: AUTH_FETCHING });
     return api().get('/auth/current/user')
       .then((response) => {
-        dispatch({ type: AUTH_FETCHED, result: response.data })
+        dispatch({ type: AUTH_FETCHED, result: response.data });
       })
       .catch((error) => {
         dispatch({ type: AUTH_FETCH_FAILED, error });
@@ -18,7 +18,5 @@ function fetchAuth() {
 }
 
 export function fetchAuthIfNeeded() {
-  return (dispatch, getState) => {
-    return dispatch(fetchAuth());
-  };
+  return (dispatch) => dispatch(fetchAuth());
 }

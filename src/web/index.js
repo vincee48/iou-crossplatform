@@ -65,7 +65,10 @@ function handleRoute(req, res, renderProps) {
 }
 
 export function serverMiddleware(req, res) {
-  match({ routes: getRoutes(configureStore(), req), location: req.url }, (error, redirectLocation, renderProps) => {
+  match({
+    routes: getRoutes(configureStore(), req),
+    location: req.url,
+  }, (error, redirectLocation, renderProps) => {
     if (error) {
       handleError(error);
     } else if (redirectLocation) {

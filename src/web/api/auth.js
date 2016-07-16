@@ -1,5 +1,5 @@
-import models from '../models';
 import passport from 'passport';
+import reactCookie from 'react-cookie';
 
 const authRouter = (server) => {
   /**
@@ -15,7 +15,12 @@ const authRouter = (server) => {
    * Response back from Facebook login
    */
   server.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { successRedirect: '/', failureRedirect: '/login' })
+   passport.authenticate('facebook', { failureRedirect: '/login' }),
+   (req, res) => {
+     res.cookie('access_token', req.user.dataValues.accessToken);
+     reactCookie.setRawCookie(req.headers.cookie);
+     res.redirect('/');
+   }
   );
 
   /**
@@ -23,6 +28,8 @@ const authRouter = (server) => {
    */
   server.get('/logout',
     (req, res) => {
+      res.clearCookie('access_token');
+      reactCookie.setRawCookie(req.headers.cookie);
       req.logout();
       res.redirect('/');
     }

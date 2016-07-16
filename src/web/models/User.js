@@ -22,11 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     classMethods: {
-      associate: function(models) {
+      associate: (models) => {
         User.hasMany(models.Gift, { as: 'SentGifts', foreignKey: 'senderId' });
         User.hasMany(models.Gift, { as: 'ReceivedGifts', foreignKey: 'recipientId' });
-      }
-    }
+      },
+    },
   });
 
   return User;

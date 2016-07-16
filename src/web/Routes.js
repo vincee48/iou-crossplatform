@@ -1,12 +1,11 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
-import { AUTH_FETCHED } from '../core/actions/auth';
+import { AUTH_FETCHED, fetchAuthIfNeeded } from '../core/actions/auth';
 import App from './containers/App';
 import Home from './containers/Home';
 import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';
 import NoMatch from './containers/NoMatch';
-import * as AuthActions from '../core/actions/auth';
 
 export default (store) => {
   const requireLogin = (nextState, replace, cb) => {
@@ -19,7 +18,7 @@ export default (store) => {
     }
 
     if (store.getState().auth.readyState !== AUTH_FETCHED) {
-      store.dispatch(AuthActions.fetchAuthIfNeeded()).then(checkAuth);
+      store.dispatch(fetchAuthIfNeeded()).then(checkAuth);
     } else {
       checkAuth();
     }
@@ -27,14 +26,14 @@ export default (store) => {
 
   return (
     <Route path="/" component={App}>
-      <IndexRoute component={Home}/>
+      <IndexRoute component={Home} />
 
       <Route onEnter={requireLogin}>
-        <Route path="dashboard" component={Dashboard}/>
+        <Route path="dashboard" component={Dashboard} />
       </Route>
 
       <Route path="login" component={Login} />
       <Route path="*" component={NoMatch} status={404} />
     </Route>
   );
-}
+};

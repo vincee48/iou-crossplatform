@@ -1,16 +1,15 @@
 import models from '../models';
 import passport from 'passport';
-import FB from '../utils/fb';
+import fb from '../utils/fb';
 
 const userRouter = (server) => {
-
   /**
    * Get user information
    */
   server.get(`${process.env.API_PREFIX}/user/fb`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      FB(req).api('/me',
+      fb(req).api('/me',
         { fields: 'name, id' },
         (response) => {
           res.json(response);
@@ -25,7 +24,7 @@ const userRouter = (server) => {
   server.get(`${process.env.API_PREFIX}/user/fb/friends`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      FB(req).api('/me/friends',
+      fb(req).api('/me/friends',
         { fields: 'name, id' },
         (response) => {
           res.json(response);
@@ -35,7 +34,7 @@ const userRouter = (server) => {
   );
 
   /**
-   *
+   * Find application user
    */
   server.get(`${process.env.API_PREFIX}/user/fb/:fbId`,
     passport.authenticate('facebook-token'),
@@ -44,7 +43,7 @@ const userRouter = (server) => {
       models.User.findById(fbId)
         .then((user) => {
           if (user) {
-            FB(req).api(`/${fbId}`,
+            fb(req).api(`/${fbId}`,
               { fields: 'name, id, picture.type(large), cover, age_range' },
               (response) => {
                 res.json({
@@ -63,7 +62,7 @@ const userRouter = (server) => {
   /**
    * Get nearby users
    */
-   server.get(`${process.env.API_PREFIX}/user/nearby`,
+  server.get(`${process.env.API_PREFIX}/user/nearby`,
     passport.authenticate('facebook-token'),
     (req, res) => {
       const currentLatitude = req.query.latitude;
@@ -73,12 +72,18 @@ const userRouter = (server) => {
 
       if (currentLatitude && currentLongitude) {
         models.sequelize.query(`SELECT "facebookId", latitude, longitude,
-            ( 3959 * acos( cos( radians(:currentLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:currentLongitude) )
+            (
+              3959 * acos( cos( radians(:currentLatitude) ) * cos( radians( latitude ) )
+              * cos( radians( longitude ) - radians(:currentLongitude)
+            )
             + sin( radians(:currentLatitude) ) * sin( radians( latitude ) ) ) ) AS distance
             FROM "Users"
             WHERE private IS false AND "facebookId" != :currentFbId
             GROUP BY "facebookId"
-            HAVING ( 3959 * acos( cos( radians(:currentLatitude) ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians(:currentLongitude) )
+            HAVING (
+              3959 * acos( cos( radians(:currentLatitude) ) * cos( radians( latitude ) )
+              * cos( radians( longitude ) - radians(:currentLongitude)
+            )
             + sin( radians(:currentLatitude) ) * sin( radians( latitude ) ) ) ) < :searchRadius
           `,
           {

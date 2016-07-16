@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Helmet from 'react-helmet';
-import { Link } from 'react-router';
 
 export default class Login extends Component {
   render() {

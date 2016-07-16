@@ -2,19 +2,23 @@ import models from '../models';
 import passport from 'passport';
 
 const giftRouter = (server) => {
-
   /**
    * Gifts that you have sent
    */
   server.get(`${process.env.API_PREFIX}/gift/sent`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      models.User.findOne({ where: { facebookId: req.user.dataValues.facebookId }, include: [{ model: models.Gift, as: 'SentGifts' }] })
-        .then((user) => {
-          if (user) {
-            res.json(user);
-          }
-        });
+      models.User.findOne({
+        where: {
+          facebookId: req.user.dataValues.facebookId,
+        },
+        include: [{ model: models.Gift, as: 'SentGifts' }],
+      })
+      .then((user) => {
+        if (user) {
+          res.json(user);
+        }
+      });
     }
   );
 
@@ -24,12 +28,17 @@ const giftRouter = (server) => {
   server.get(`${process.env.API_PREFIX}/gift/received`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      models.User.findOne({ where: { facebookId: req.user.dataValues.facebookId }, include: [{ model: models.Gift, as: 'ReceivedGifts' }] })
-        .then((user) => {
-          if (user) {
-            res.json(user);
-          }
-        });
+      models.User.findOne({
+        where: {
+          facebookId: req.user.dataValues.facebookId,
+        },
+        include: [{ model: models.Gift, as: 'ReceivedGifts' }],
+      })
+      .then((user) => {
+        if (user) {
+          res.json(user);
+        }
+      });
     }
   );
 
@@ -60,7 +69,6 @@ const giftRouter = (server) => {
       }
     }
   );
-
 };
 
 module.exports = giftRouter;

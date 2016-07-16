@@ -11,13 +11,17 @@ module.exports = (sequelize, DataTypes) => {
     description: {
       type: DataTypes.STRING,
     },
+    redeemed: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   }, {
     classMethods: {
-      associate: function(models) {
-        Gift.belongsTo(models.User, {as: 'Recipient', foreignKey: 'recipientId'});
-        Gift.belongsTo(models.User, {as: 'Sender', foreignKey: 'senderId'});
-      }
-    }
+      associate: (models) => {
+        Gift.belongsTo(models.User, { as: 'Recipient', foreignKey: 'recipientId' });
+        Gift.belongsTo(models.User, { as: 'Sender', foreignKey: 'senderId' });
+      },
+    },
   });
 
   return Gift;

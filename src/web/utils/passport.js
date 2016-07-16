@@ -46,9 +46,8 @@ module.exports = (server) => {
     },
     (accessToken, refreshToken, profile, done) => {
       models.User.findOrCreate({ where: { facebookId: profile.id } })
-        .spread((user, created) => {
-          user.accessToken = accessToken;
-          user.save()
+        .spread((user) => {
+          user.save({ accessToken })
             .then(() => {
               done(null, user);
             })
@@ -70,9 +69,7 @@ module.exports = (server) => {
     },
     (accessToken, refreshToken, profile, done) => {
       models.User.findOrCreate({ where: { facebookId: profile.id } })
-        .spread((user, created) => {
-          return done(null, user);
-        })
+        .spread((user) => done(null, user))
         .catch((error) => {
           done(error);
         });

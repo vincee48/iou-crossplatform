@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { Link, IndexLink } from 'react-router';
+import React, { Component } from 'react';
+import { IndexLink } from 'react-router';
 import Helmet from 'react-helmet';
 
 export default class Dashboard extends Component {

@@ -1,4 +1,4 @@
-import { FB, FacebookApiException } from 'fb';
+import { FB } from 'fb';
 
 export default function fb(req) {
   FB.options({
