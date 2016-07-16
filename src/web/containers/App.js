@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
+import Header from '../components/Header/Header';
 
 export default class App extends Component {
   static propTypes = {
@@ -19,6 +20,7 @@ export default class App extends Component {
             },
           ]}
         />
+        <Header />
         {this.props.children}
       </div>
     );

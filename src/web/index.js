@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import Root from './containers/Root';
 import configureStore from './configureStore';
 import { isBrowser } from '../core/utils';
+import 'normalize.css';
 
 if (isBrowser()) {
   const store = configureStore(window.__INITIAL_STATE__);

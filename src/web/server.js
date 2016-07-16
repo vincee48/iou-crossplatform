@@ -1,4 +1,5 @@
 require('babel-core/register');
+require('css-modules-require-hook/preset');
 require('babel-polyfill');
 
 const path = require('path');

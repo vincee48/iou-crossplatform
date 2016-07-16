@@ -1,6 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 
-class Root extends Component {
+export default class Root extends Component {
+  static propTypes = {
+    content: PropTypes.string,
+    initialState: PropTypes.object,
+    head: PropTypes.object,
+  };
+
   renderInitialState() {
     if (this.props.initialState) {
       const innerHtml = `window.__INITIAL_STATE__ = ${JSON.stringify(this.props.initialState)}`;
@@ -46,11 +52,3 @@ class Root extends Component {
     );
   }
 }
-
-Root.propTypes = {
-  content: PropTypes.string,
-  initialState: PropTypes.object,
-  head: PropTypes.object,
-};
-
-export default Root;
