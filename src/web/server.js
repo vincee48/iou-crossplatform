@@ -16,7 +16,7 @@ const expressSanitized = require('express-sanitize-escape');
 
 const port = process.env.PORT || 3000;
 const server = express();
-server.use(express.static(path.resolve(__dirname, 'dist')));
+server.use(express.static('dist'));
 server.use(cors());
 server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
