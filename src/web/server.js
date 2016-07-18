@@ -1,6 +1,7 @@
 require('babel-core/register');
 require('css-modules-require-hook/preset');
 require('babel-polyfill');
+require('dotenv').config({ silent: true });
 
 const path = require('path');
 const express = require('express');
@@ -47,7 +48,8 @@ server.get('/favicon.ico', (req, res) => {
 });
 
 if (process.env.NODE_ENV === 'development') {
-  const compiler = webpack(require('../../webpack.config.js'));
+  const config = require('../../webpack.config.js');
+  const compiler = webpack(config);
 
   server.use(dev(compiler, {
     publicPath: config.output.publicPath,
