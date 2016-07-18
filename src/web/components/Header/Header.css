@@ -1,5 +1,7 @@
 @value primary, secondary from "../../styles/colors.css";
 
 .root {
+  display: flex;
+  flex-direction: row;
   background-color: secondary;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import { AUTH_FETCHED, fetchAuthIfNeeded } from '../core/actions/auth';
-import App from './containers/App';
+import App from './containers/App/App';
 import Home from './containers/Home';
 import Dashboard from './containers/Dashboard';
 import Login from './containers/Login';

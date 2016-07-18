@@ -1,6 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 import Helmet from 'react-helmet';
-import Header from '../components/Header/Header';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import styles from './App.css';
 
 export default class App extends Component {
   static propTypes = {
@@ -21,7 +23,10 @@ export default class App extends Component {
           ]}
         />
         <Header />
-        {this.props.children}
+        <div className={styles.root}>
+          {this.props.children}
+        </div>
+        <Footer />
       </div>
     );
   }

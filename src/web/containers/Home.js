@@ -2,8 +2,8 @@ import React, { Component, PropTypes } from 'react';
 import Helmet from 'react-helmet';
 import { connect } from 'react-redux';
 import * as UsersActions from '../../core/actions/users';
-import UserList from '../components/UserList';
 import { Link } from 'react-router';
+import Logo from '../components/Logo/Logo';
 
 @connect(state => ({ users: state.users }))
 export default class Home extends Component {
@@ -22,28 +22,12 @@ export default class Home extends Component {
     Home.readyOnActions(this.props.dispatch);
   }
 
-  renderUsers() {
-    const users = this.props.users;
-
-    if (users.readyState === UsersActions.USERS_INVALID ||
-      users.readyState === UsersActions.USERS_FETCHING) {
-      return <p>Loading...</p>;
-    }
-
-    if (users.readyState === UsersActions.USERS_FETCH_FAILED) {
-      return <p>Failed to fetch users</p>;
-    }
-
-    return <UserList users={users.list} />;
-  }
-
   render() {
     return (
       <div>
         <Helmet title="Home" />
-        <h5>Users:</h5>
-        {this.renderUsers()}
-        <Link to="login">Login with Facebook</Link>
+        <Logo />
+        <a href="/auth/facebook">Login with Facebook</a>
         <a href="/logout">Logout</a>
         <div>
           <Link to="dashboard">Dashboard</Link>
