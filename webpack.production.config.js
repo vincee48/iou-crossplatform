@@ -1,9 +1,11 @@
 'use strict';
 
+require('dotenv').config({ path: './.env-production', silent: true }); // Heroku builds will not have a .env
 const path = require('path');
 const webpack = require('webpack');
 const del = require('del');
 const ExtractText = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 class CleanPlugin {
   constructor(options) {
@@ -26,6 +28,12 @@ module.exports = {
     new CleanPlugin({
       files: ['dist/*'],
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new ExtractText('style.css'),
     new webpack.optimize.DedupePlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
@@ -34,7 +42,7 @@ module.exports = {
         screw_ie8: true,
       },
     }),
-    new ExtractText('style.css'),
+    new OptimizeCssAssetsPlugin(),
   ],
   module: {
     loaders: [
