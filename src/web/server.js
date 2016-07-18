@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 const webpack = require('webpack');
 const dev = require('webpack-dev-middleware');
 const hot = require('webpack-hot-middleware');
-const config = require('../../webpack.config.js');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const expressSanitized = require('express-sanitize-escape');
@@ -48,7 +47,7 @@ server.get('/favicon.ico', (req, res) => {
 });
 
 if (process.env.NODE_ENV === 'development') {
-  const compiler = webpack(config);
+  const compiler = webpack(require('../../webpack.config.js'));
 
   server.use(dev(compiler, {
     publicPath: config.output.publicPath,
