@@ -1,9 +1,8 @@
 {
-  "name": "iou",
+  "name": "iou-web",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "native": "node node_modules/react-native/local-cli/cli.js start",
     "build": "webpack --progress --config webpack.production.config.js",
     "start": "nodemon --ignore src/web/containers --ignore src/web/components --ignore src/core/ src/web/server.js",
     "server": "node src/web/server.js",

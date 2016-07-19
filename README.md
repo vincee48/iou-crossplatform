@@ -1,4 +1,4 @@
-## WIP cross platform application
+## WIP web application
 
 Special thanks to https://github.com/DominicTobias/universal-react for a lightweight setup.
 
@@ -18,4 +18,6 @@ npm start
 
 ## Production environment
 
-This repository runs the build on a Heroku instance with a PostgresDB addon. Heroku as a production environment does not install devDependencies, requiring all build tools to be installed as a dependency.
+npm run build
+
+Before deploying to git
