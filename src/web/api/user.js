@@ -27,7 +27,7 @@ const userRouter = (server) => {
       fb(req).api('/me/friends',
         { fields: 'name, id, picture.type(large), cover' },
         (response) => {
-          res.json(response);
+          res.json(response.data);
         }
       );
     }
