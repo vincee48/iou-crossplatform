@@ -52,7 +52,7 @@ const giftRouter = (server) => {
   server.post(`${process.env.API_PREFIX}/gift/send`,
     passport.authenticate('facebook-token'),
     (req, res) => {
-      const recipientId = req.body.fbId;
+      const recipientId = req.body.recipientId;
       const senderId = req.user.dataValues.facebookId;
       const giftType = req.body.type || 'BEER';
       const description = req.body.description;
@@ -65,7 +65,7 @@ const giftRouter = (server) => {
           senderId,
         }).then((response) => {
           res.json(response);
-        }).catch(() => {
+        }).catch((error) => {
           res.sendStatus(500);
         });
       } else {

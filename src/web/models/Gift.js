@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true,
     },
     giftType: {
-      type: DataTypes.ENUM('BEER', 'LUNCH', 'DINNER', 'MONEY', 'DATE'),
+      type: DataTypes.ENUM('beer', 'food', 'heart', 'coffee', 'money'),
     },
     description: {
       type: DataTypes.STRING,
