@@ -73,6 +73,64 @@ const giftRouter = (server) => {
       }
     }
   );
+
+  /**
+   * Redeem gift
+   */
+  server.post(`${process.env.API_PREFIX}/gift/redeem`,
+    passport.authenticate('facebook-token'),
+    (req, res) => {
+      const giftId = req.body.giftId;
+      const recipientId = req.user.dataValues.facebookId;
+      if (recipientId) {
+        models.Gift.find({
+          where: {
+            id: giftId,
+            recipientId,
+          }
+        }).then((gift) => {
+          if (gift) {
+            gift.update({
+              redeemed: true,
+            }).then((updatedGift) => {
+              res.send(updatedGift);
+            });
+          } else {
+            res.sendStatus(400);
+          }
+        }).catch(() => {
+          res.sendStatus(500);
+        })
+      }
+    }
+  );
+
+  /**
+   * Remind gift
+   */
+  server.post(`${process.env.API_PREFIX}/gift/remind`,
+    passport.authenticate('facebook-token'),
+    (req, res) => {
+      const giftId = req.body.giftId;
+      const senderId = req.user.dataValues.facebookId;
+      if (senderId) {
+        models.Gift.find({
+          where: {
+            id: giftId,
+            senderId,
+          }
+        }).then((gift) => {
+          if (gift) {
+            // send push notification to recipient
+          } else {
+            res.sendStatus(400);
+          }
+        }).catch(() => {
+          res.sendStatus(500);
+        })
+      }
+    }
+  );
 };
 
 module.exports = giftRouter;
