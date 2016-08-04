@@ -52,6 +52,32 @@ const userRouter = (server) => {
   );
 
   /**
+   * Set device token
+   */
+  server.post(`${process.env.API_PREFIX}/user/deviceToken`,
+    passport.authenticate('facebook-token'),
+    (req, res) => {
+      const fbId = req.user.dataValues.facebookId;
+      const deviceToken = req.body.deviceToken;
+
+      models.User.findById(fbId)
+        .then((user) => {
+          if (user) {
+            user.update({
+              deviceToken,
+            }).then((updatedUser) => {
+              res.send(updatedUser);
+            });
+          } else {
+            res.sendStatus(400);
+          }
+        }).catch(() => {
+          res.sendStatus(500);
+        });
+    }
+  );
+
+  /**
    * Get nearby users
    */
   server.get(`${process.env.API_PREFIX}/user/nearby`,

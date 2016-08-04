@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     accessToken: {
       type: DataTypes.STRING,
     },
-    deviceId: {
+    deviceToken: {
       type: DataTypes.STRING,
     },
     name: {
